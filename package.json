@@ -1,0 +1,48 @@
+{
+  "name": "karma-trx-reporter",
+  "version": "0.1.0",
+  "description": "A Karma plugin. Report results in MSTest trx format.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/karma-runner/karma-junit-reporter.git"
+  },
+  "keywords": [
+    "karma-plugin",
+    "karma-reporter",
+    "trx"
+  ],
+  "author": {
+    "name": "Stefan Barthel",
+    "email": "bas@zuehlke.com"
+  },
+  "dependencies": {
+    "xmlbuilder": "0.4.2"
+  },
+  "peerDependencies": {
+    "karma": ">=0.9"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-npm": "~0.0.2",
+    "grunt-bump": "~0.0.7",
+    "grunt-auto-release": "~0.0.2"
+  },
+  "contributors": [
+    {
+      "name": "Michael Lehman",
+      "email": "leh@zuehlke.com"
+    }
+  ],
+  "readme": "# karma-trx-reporter\n\n> Reporter for the MSTest trx format.\n\n## Installation\n\nThe easiest way is to keep `karma-trx-reporter` as a devDependency in your `package.json`.\n```json\n{\n  \"devDependencies\": {\n    \"karma\": \"~0.10\",\n    \"karma-trx-reporter\": \"~0.1\"\n  }\n}\n```\n\nYou can simple do it by:\n```bash\nnpm install karma-trx-reporter --save-dev\n```\n\n## Configuration\n```js\n// karma.conf.js\nmodule.exports = function(config) {\n  config.set({\n    reporters: ['progress', 'trx'],\n\n    // the default configuration\n    trxReporter: {\n      outputFile: 'test-results.trx',\n      suite: ''\n    }\n  });\n};\n```\n\nYou can pass list of reporters as a CLI argument too:\n```bash\nkarma start --reporters trx,dots\n```\n\n----\n\nFor more information on Karma see the [homepage].\n\n\n[homepage]: http://karma-runner.github.com\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/karma-runner/karma-junit-reporter/issues"
+  },
+  "_id": "karma-trx-reporter@0.1.0",
+  "_from": "karma-trx-reporter@~0.1"
+}
