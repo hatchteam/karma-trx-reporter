@@ -31,20 +31,12 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
 
     baseReporterDecorator(this);
 
-    this.onRunStart = function (browsers) {
-        // todo: possibly support multiple browsers => provide test list for each browser
-        if (browsers.length != 1) {
-            throw 'Currently only one browser at a time is supported!'
-        }
-
+    this.onRunStart = function () {
         var userName = process.env['USERNAME'];
-
-        // todo: is there a better way of getting the first one here?
-        var browser = browsers.map( function(e) { return e; } )[0];
 
         testRun = builder.create("TestRun", {version: '1.0', encoding: 'UTF-8'})
             .att('id', newGuid())
-            .att('name', userName + '@' + hostName + ' ' + getTimestamp() + ' ' + browser.name)
+            .att('name', userName + '@' + hostName + ' ' + getTimestamp())
             .att('runUser', userName)
             .att('xmlns', 'http://microsoft.com/schemas/VisualStudio/TeamTest/2010');
 
@@ -70,6 +62,9 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
 
         testEntries = testRun.ele('TestEntries');
         results = testRun.ele('Results');
+    };
+
+    this.onBrowserStart = function(browser) {
     };
 
     this.onBrowserComplete = function (browser) {
@@ -105,7 +100,7 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
 
     this.specSuccess = this.specSkipped = this.specFailure = function (browser, result) {
         var unitTestId = newGuid();
-        var unitTestName = result.description;
+        var unitTestName = browser.name + '_' + result.description;
         var className = result.suite.join('.');
         var codeBase = className + '.' + unitTestName;
 
