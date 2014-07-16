@@ -2,6 +2,12 @@
 
 > Reporter for the VisualStudio TRX format.
 
+## Status
+| Branch        | Status         |
+| ------------- |:-------------:|
+| master        | [![Build Status](https://travis-ci.org/hatchteam/protractor-trx-reporter.svg?branch=master)](https://travis-ci.org/hatchteam/protractor-trx-reporter) |
+| develop       | [![Build Status](https://travis-ci.org/hatchteam/protractor-trx-reporter.svg?branch=develop)](https://travis-ci.org/hatchteam/protractor-trx-reporter)|
+
 ## Installation
 
 The easiest way is to keep `karma-trx-reporter` as a devDependency in your `package.json`.
