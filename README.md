@@ -5,8 +5,8 @@
 ## Status
 | Branch        | Status         |
 | ------------- |:-------------:|
-| master        | [![Build Status](https://travis-ci.org/hatchteam/protractor-trx-reporter.svg?branch=master)](https://travis-ci.org/hatchteam/protractor-trx-reporter) |
-| develop       | [![Build Status](https://travis-ci.org/hatchteam/protractor-trx-reporter.svg?branch=develop)](https://travis-ci.org/hatchteam/protractor-trx-reporter)|
+| master        | [![Build Status](https://travis-ci.org/hatchteam/karma-trx-reporter.svg?branch=master)](https://travis-ci.org/hatchteam/karma-trx-reporter) |
+| develop       | [![Build Status](https://travis-ci.org/hatchteam/karma-trx-reporter.svg?branch=develop)](https://travis-ci.org/hatchteam/karma-trx-reporter)|
 
 ## Installation
 
