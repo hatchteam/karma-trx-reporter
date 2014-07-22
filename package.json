@@ -4,7 +4,7 @@
   "description": "A Karma plugin. Report results in MSTest trx format.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\""
+    "test": "./node_modules/.bin/mocha --timeout 259200000 ./test/*.js"
   },
   "repository": {
     "type": "git",
@@ -28,9 +28,10 @@
   "license": "MIT",
   "devDependencies": {
     "grunt": "~0.4.1",
-    "grunt-npm": "~0.0.2",
+    "grunt-auto-release": "~0.0.2",
     "grunt-bump": "~0.0.7",
-    "grunt-auto-release": "~0.0.2"
+    "grunt-npm": "~0.0.2",
+    "mocha": "^1.20.1"
   },
   "contributors": [
     {
