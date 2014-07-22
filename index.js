@@ -70,7 +70,8 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
     this.onBrowserComplete = function (browser) {
         var result = browser.lastResult;
 
-        resultSummary.att('outcome', !result.error ? 'Passed' : 'Failed');
+        var passed = result.failed <= 0 && !result.error;
+        resultSummary.att('outcome', passed ? 'Passed' : 'Failed');
 
         // todo: checkout if all theses numbers map well
         counters.att('total', result.total)
