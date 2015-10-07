@@ -13,6 +13,7 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
     var testListIdNotInAList;
     var testEntries;
     var results;
+    var times;
 
     var getTimestamp = function () {
         // todo: use local time ?
@@ -33,16 +34,21 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
 
     this.onRunStart = function () {
         var userName = process.env['USERNAME'];
-
+        var runStartTimestamp = getTimestamp();
         testRun = builder.create("TestRun", {version: '1.0', encoding: 'UTF-8'})
             .att('id', newGuid())
-            .att('name', userName + '@' + hostName + ' ' + getTimestamp())
+            .att('name', userName + '@' + hostName + ' ' + runStartTimestamp)
             .att('runUser', userName)
             .att('xmlns', 'http://microsoft.com/schemas/VisualStudio/TeamTest/2010');
 
         testRun.ele('TestSettings')
             .att('name', 'Karma Test Run')
             .att('id', newGuid());
+
+        times = testRun.ele('Times')
+        times.att('creation', runStartTimestamp)
+        times.att('queuing', runStartTimestamp)
+        times.att('start', runStartTimestamp);
 
         resultSummary = testRun.ele('ResultSummary');
         counters = resultSummary.ele('Counters');
@@ -86,6 +92,7 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
     };
 
     this.onRunComplete = function () {
+        times.att('finish', getTimestamp());
         var xmlToOutput = testRun;
 
         helper.mkdirIfNotExists(path.dirname(outputFile), function () {
