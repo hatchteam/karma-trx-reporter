@@ -30,6 +30,25 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     };
 
+    var formatDuration = function (duration) {
+        duration = duration | 0;
+        var ms = duration % 1000;
+        duration -= ms;
+        var s = (duration / 1000) % 60;
+        duration -= s * 1000;
+        var m = (duration / 60000) % 60;
+        duration -= m * 60000;
+        var h = (duration / 3600000) % 24;
+        duration -= h * 3600000;
+        var d = duration / 86400000;
+
+        return (d > 0 ? d + '.' : '') +
+            (h < 10 ? '0' + h : h) + ':' +
+            (m < 10 ? '0' + m : m) + ':' +
+            (s < 10 ? '0' + s : s) + '.' +
+            (ms < 10 ? '00' + ms : ms < 100 ? '0' + ms : ms);
+    };
+
     baseReporterDecorator(this);
 
     this.onRunStart = function () {
@@ -133,8 +152,7 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
             .att('testId', unitTestId)
             .att('testName', unitTestName)
             .att('computerName', hostName)
-            // todo: calculate c# timespan from result.duration
-            // .att('duration', ((result.time || 0) / 1000))
+            .att('duration', formatDuration(result.time || 0))
             .att('startTime', getTimestamp())
             .att('endTime', getTimestamp())
             // todo: are there other test types?
