@@ -4,6 +4,7 @@ var builder = require('xmlbuilder');
 
 var TRXReporter = function (baseReporterDecorator, config, emitter, logger, helper, formatError) {
     var outputFile = config.outputFile;
+    var shortTestName = !!config.shortTestName;
     var log = logger.create('reporter.trx');
     var hostName = require('os').hostname();
     var testRun;
@@ -28,6 +29,25 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
 
     var newGuid = function () {
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    };
+
+    var formatDuration = function (duration) {
+        duration = duration | 0;
+        var ms = duration % 1000;
+        duration -= ms;
+        var s = (duration / 1000) % 60;
+        duration -= s * 1000;
+        var m = (duration / 60000) % 60;
+        duration -= m * 60000;
+        var h = (duration / 3600000) % 24;
+        duration -= h * 3600000;
+        var d = duration / 86400000;
+
+        return (d > 0 ? d + '.' : '') +
+            (h < 10 ? '0' + h : h) + ':' +
+            (m < 10 ? '0' + m : m) + ':' +
+            (s < 10 ? '0' + s : s) + '.' +
+            (ms < 10 ? '00' + ms : ms < 100 ? '0' + ms : ms);
     };
 
     baseReporterDecorator(this);
@@ -81,8 +101,8 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
 
         // todo: checkout if all theses numbers map well
         counters.att('total', result.total)
-            .att('executed', result.total)
-            .att('passed', result.total - result.failed)
+            .att('executed', result.total - result.skipped)
+            .att('passed', result.success)
             .att('error', result.error ? 1 : 0)
             .att('failed', result.failed);
 
@@ -108,7 +128,9 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
 
     this.specSuccess = this.specSkipped = this.specFailure = function (browser, result) {
         var unitTestId = newGuid();
-        var unitTestName = browser.name + '_' + result.description;
+        var unitTestName = shortTestName
+            ? result.description
+            : browser.name + '_' + result.description;
         var className = result.suite.join('.');
         var codeBase = className + '.' + unitTestName;
 
@@ -133,14 +155,12 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
             .att('testId', unitTestId)
             .att('testName', unitTestName)
             .att('computerName', hostName)
-            // todo: calculate c# timespan from result.duration
-            // .att('duration', ((result.time || 0) / 1000))
+            .att('duration', formatDuration(result.time || 0))
             .att('startTime', getTimestamp())
             .att('endTime', getTimestamp())
             // todo: are there other test types?
             .att('testType', '13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b') // that guid seems to represent 'unit test'
-            // todo: possibly write result.skipped also => Check out how this could happen.
-            .att('outcome', result.success ? 'Passed' : 'Failed')
+            .att('outcome', result.skipped ? 'NotExecuted' : (result.success ? 'Passed' : 'Failed'))
             .att('testListId', testListIdNotInAList);
 
         if (!result.success) {
