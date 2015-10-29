@@ -4,6 +4,7 @@ var builder = require('xmlbuilder');
 
 var TRXReporter = function (baseReporterDecorator, config, emitter, logger, helper, formatError) {
     var outputFile = config.outputFile;
+    var shortTestName = !!config.shortTestName;
     var log = logger.create('reporter.trx');
     var hostName = require('os').hostname();
     var testRun;
@@ -127,7 +128,9 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
 
     this.specSuccess = this.specSkipped = this.specFailure = function (browser, result) {
         var unitTestId = newGuid();
-        var unitTestName = browser.name + '_' + result.description;
+        var unitTestName = shortTestName
+            ? result.description
+            : browser.name + '_' + result.description;
         var className = result.suite.join('.');
         var codeBase = className + '.' + unitTestName;
 
