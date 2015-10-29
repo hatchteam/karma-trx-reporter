@@ -100,8 +100,8 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
 
         // todo: checkout if all theses numbers map well
         counters.att('total', result.total)
-            .att('executed', result.total - result.skipped)
-            .att('passed', result.success)
+            .att('executed', result.total)
+            .att('passed', result.total - result.failed)
             .att('error', result.error ? 1 : 0)
             .att('failed', result.failed);
 
@@ -153,9 +153,12 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
             .att('testName', unitTestName)
             .att('computerName', hostName)
             .att('duration', formatDuration(result.time || 0))
+            .att('startTime', getTimestamp())
+            .att('endTime', getTimestamp())
             // todo: are there other test types?
             .att('testType', '13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b') // that guid seems to represent 'unit test'
-            .att('outcome', result.skipped ? 'NotExecuted' : (result.success ? 'Passed' : 'Failed'))
+            // todo: possibly write result.skipped also => Check out how this could happen.
+            .att('outcome', result.success ? 'Passed' : 'Failed')
             .att('testListId', testListIdNotInAList);
 
         if (!result.success) {
