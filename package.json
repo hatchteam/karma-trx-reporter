@@ -1,6 +1,6 @@
 {
   "name": "karma-trx-reporter",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "A Karma plugin. Report results in MSTest trx format.",
   "main": "index.js",
   "scripts": {
@@ -45,6 +45,6 @@
   "bugs": {
     "url": "https://github.com/hatchteam/karma-trx-reporter/issues"
   },
-  "_id": "karma-trx-reporter@0.2.7",
-  "_from": "karma-trx-reporter@~0.2.7"
+  "_id": "karma-trx-reporter@0.2.8",
+  "_from": "karma-trx-reporter@~0.2.8"
 }
