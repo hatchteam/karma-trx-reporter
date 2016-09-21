@@ -7,7 +7,7 @@
     "index.js"
   ],
   "scripts": {
-    "test": "./node_modules/.bin/mocha --timeout 259200000 ./test/*.js",
+    "test": "npm run build && ./node_modules/.bin/mocha --timeout 259200000 ./test/*.js",
     "build": "tsc",
     "postinstall": "typings install"
   },
