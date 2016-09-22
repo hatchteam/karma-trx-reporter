@@ -1,53 +1,58 @@
-import * as  assert from 'assert';
-import { TrxReporter, TrxReporterConfig } from '../src/Reporter';
+import { use, expect } from 'chai';
+import * as sinonchai from 'sinon-chai';
+import * as sinon from 'sinon';
+import * as proxyquire from 'proxyquire';
 
-describe('some noise', function(){
-    it('true does not equal false', function(){
+use(sinonchai);
 
-        assert.equal(false, !true);
-    });
-    it('Can resolve user', function(){
-        var user = process.env['USER'];
-        assert.equal(user!== undefined, true);
-    });
-});
+function noop () {}
+
+const fakeConfig  = {
+    outputFile: './TestTrxResultsFile.trx'
+};
+
+const fakeHelper = { 
+    mkdirIfNotExists: sinon.stub().yields(),
+    normalizeWinPath: (directory:string) => directory
+};
+
+const fakeLoggerFactory = {
+  create: noop
+}
+
+const formatError = (error: string) => error;
+
+const fakeBaseReporterDecorator = noop
 
 describe('karma-trx-reporter', function(){
-    it('can create instance', function(){
-        // act
-        var reporter = createReporter();
 
+    let reporterModule: any;
+    let reporter: karma.Reporter;
+    let fakeFs: any;
+
+    beforeEach(function () {
+        fakeFs = {
+            writeFile: sinon.spy()
+        }
+
+        reporterModule = proxyquire('../src', {
+            fs: fakeFs
+        })
+    });
+
+    beforeEach(function () {
+        let TryReporter = reporterModule['reporter:trx'][1];
+        reporter = <karma.Reporter>(new TryReporter(
+            fakeBaseReporterDecorator,
+            fakeConfig,
+            fakeLoggerFactory,
+            fakeHelper,
+            formatError));
+    });
+
+    it('can create instance', function(){
         // assert
-        assert.equal(reporter !== undefined, true);
+        expect(reporter).not.to.be.undefined;
     });
 
 });
-
-function createReporter() {
-    const config:TrxReporterConfig  = {
-        outputFile: './TestTrxResultsFile.trx'
-    };
-
-    const logger: karma.Logger = {
-        debug: (message: string) => {},
-        warn: (message: string) => {} }
-
-    const loggerFactory: karma.LoggerFactory = {
-        create: (name: string) => logger
-    };
-
-    const helper: karma.Helper = { 
-        mkdirIfNotExists: (directory:string, callback: () => {}) => {},
-        normalizeWinPath: (directory:string) => directory
-    };
-    const formatError = (error: string) => error;
-
-    const reporter = new TrxReporter(
-        function(reporter){},
-        config,
-        loggerFactory,
-        helper, 
-        formatError);
-
-    return reporter;
-};
