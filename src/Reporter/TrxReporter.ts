@@ -3,7 +3,7 @@ import * as os from 'os';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { TrxReporterConfig } from './TRXReporterConfig';
+import { TrxReporterConfig } from './TrxReporterConfig';
 import * as Formatters from './Formatters';
 import * as Outcomes from './Outcomes';
 
