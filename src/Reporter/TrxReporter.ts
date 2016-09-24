@@ -1,4 +1,4 @@
-import { TestRun, TestRunParams } from 'node-trx';
+import { TestRun, TestRunParams, UnitTest } from 'node-trx';
 import * as os from 'os';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -14,7 +14,7 @@ export class TrxReporter implements karma.Reporter {
     private hostName: string = os.hostname();
     private log:karma.Logger;
     private pendingFileWritings: number = 0;
-    private fileWritingFinished: () => any;
+    private fileWritingFinished: () => any = () => {};
 
     constructor(
         private baseReporterDecorator: (reporter: karma.Reporter) => any,
@@ -43,26 +43,32 @@ export class TrxReporter implements karma.Reporter {
         });
     }
 
-    public onRunComplete(): void {     
+    public onRunComplete(): void {   
+        const self = this;
+
         this.testRun.times.finish = TrxReporter.getTimestamp();
+
+        const outputFile: string = this.config.outputFile;        
         const output:string = this.testRun.toXml();
-        const outputFile: string = this.config.outputFile;
+        this.testRun = null;
 
         this.pendingFileWritings++;
-
+        
         this.helper.mkdirIfNotExists(path.dirname(outputFile), function () {
             fs.writeFile(outputFile, output, function (err) {
                 if (err) {
-                    this.log.warn(`Cannot write TRX testRun\n\t${err.message}`);
+                    self.log.warn(`Cannot write TRX testRun\n\t${err.message}`);
                 } else {
-                    this.log.debug(`TRX results written to "${outputFile}".`);
+                    self.log.debug(`TRX results written to "${outputFile}".`);
                 }
 
-                if (!--this.pendingFileWritings) {
-                    this.fileWritingFinished()
+                if (!--self.pendingFileWritings) {
+                    self.fileWritingFinished()
                 }
             });     
         });
+
+        
     }
 
     public onBrowserStart(browser: karma.Browser): void {
@@ -126,18 +132,18 @@ export class TrxReporter implements karma.Reporter {
         }
     }
 
-    private addSpec(browser: karma.Browser, result: karma.TestResult): void {
+    private addSpec = (browser: karma.Browser, result: karma.TestResult) => {
         const unitTestName: string = Formatters.defaultNameFormatter(browser, result);
         const className: string = Formatters.defaultClassNameFormatter(browser, result);
         const errorMessage: string = result.log.map((item) => this.formatError(item)).join('\n');
 
         this.testRun.addResult({
-            test: {
+            test: new UnitTest({
                 name: unitTestName,
                 methodName: unitTestName,
                 methodCodeBase: `${className}'.'${unitTestName}`,
                 methodClassName: className
-            },
+            }),
             computerName: this.hostName,
             outcome: TrxReporter.getTestOutcome(result),
             duration: TrxReporter.formatDuration(result.time || 0),
@@ -146,4 +152,8 @@ export class TrxReporter implements karma.Reporter {
             errorMessage: !result.success ? errorMessage : null
         });
     }
+
+    private saveTestRun = () => {
+
+    };
 }

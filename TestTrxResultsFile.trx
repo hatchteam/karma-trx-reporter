@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<TestRun xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" id="e63c4183-7115-4b79-bf21-955bdfba9e9e" name="lehmamic@Michaels-MacBook-Pro.local 2016-09-24T11:16:34" runUser="lehmamic">
+  <Times creation="2016-09-24T11:16:34" queuing="2016-09-24T11:16:34" start="2016-09-24T11:16:34" finish="2016-09-24T11:16:34"/>
+  <TestSettings name="Default Test Settings" id="ce1a4cfb-64fa-4d63-8815-e9984737a62c"/>
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" error="0" failed="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0"/>
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest id="7930ae29-87ca-4f79-ac23-ac30f62c30b8" name="Android_should not fail">
+      <Execution id="4272fe37-bc39-4afa-92fd-c139b8725e49"/>
+      <TestMethod codeBase="Sender.using it.get request'.'Android_should not fail" className="Sender.using it.get request" name="Android_should not fail"/>
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList id="8c84fa94-04c1-424b-9868-57a2d4851a1d" name="Results Not in a List"/>
+    <TestList id="19431567-8539-422a-85d7-44ee4e166bda" name="All Loaded Results"/>
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="7930ae29-87ca-4f79-ac23-ac30f62c30b8" executionId="4272fe37-bc39-4afa-92fd-c139b8725e49" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d"/>
+  </TestEntries>
+  <Results>
+    <UnitTestResult testId="7930ae29-87ca-4f79-ac23-ac30f62c30b8" testName="Android_should not fail" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" computerName="Michaels-MacBook-Pro.local" outcome="Passed" startTime="2016-09-24T11:16:34" endTime="2016-09-24T11:16:34" duration="00:00:10.000" executionId="4272fe37-bc39-4afa-92fd-c139b8725e49"/>
+  </Results>
+</TestRun>

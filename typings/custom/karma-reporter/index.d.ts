@@ -14,8 +14,9 @@ declare namespace karma {
     }
 
     interface Browser {
-        id: number;
+        id: string;
         name: string;
+        fullName: string;
         lastResult: BrowserResult;
     }
 

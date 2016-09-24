@@ -5,29 +5,19 @@ declare module "node-trx" {
         times: Times;
     }
 
-    interface Times {
-        creation: string,
-        queuing: string,
-        start: string,
-        finish: string
-    }
-
-    class TestRun {
-        public id: string;
-        public name: string;
-        public times: Times;
-        constructor(metadata: TestRunParams);
-        addResult(result: TestResult);
-        toXml(): string;
-    }
-
-    interface UnitTest {
+    interface UnitTestParams {
         name: string;
         methodName: string;
         methodCodeBase: string;
         methodClassName: string; 
         description?: string;
+    }
 
+    interface Times {
+        creation: string,
+        queuing: string,
+        start: string,
+        finish: string
     }
 
     interface TestResult {  
@@ -40,5 +30,25 @@ declare module "node-trx" {
         output?: string;
         errorMessage?: string;
         errorStacktrace?: string;
+    }
+
+    class TestRun {
+        public id: string;
+        public name: string;
+        public times: Times;
+        constructor(metadata: TestRunParams);
+        addResult(result: TestResult);
+        toXml(): string;
+    }
+
+    class UnitTest {
+        public id: string;
+        public name: string;
+        public type: string;
+        public methodName: string;
+        public methodCodeBase: string;
+        public methodClassName: string; 
+        public description: string;
+        constructor(params: UnitTestParams);
     }
 }
