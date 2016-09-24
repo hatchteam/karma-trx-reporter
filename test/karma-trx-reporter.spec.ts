@@ -3,50 +3,24 @@ import * as sinonchai from 'sinon-chai';
 import * as sinon from 'sinon';
 import * as proxyquire from 'proxyquire';
 
+import { TrxReporterFactory } from './TrxReporterFactory';
+import { FsStub } from './Stubs';
+
 use(sinonchai);
-
-function noop () {}
-
-const fakeConfig  = {
-    outputFile: './TestTrxResultsFile.trx'
-};
-
-const fakeHelper = { 
-    mkdirIfNotExists: sinon.stub().yields(),
-    normalizeWinPath: (directory:string) => directory
-};
-
-const fakeLoggerFactory = {
-  create: noop
-}
-
-const formatError = (error: string) => error;
-
-const fakeBaseReporterDecorator = noop
 
 describe('karma-trx-reporter', () => {
 
-    let reporterModule: any;
+    let factory: TrxReporterFactory;
     let reporter: karma.Reporter;
-    let fakeFs: any;
+    let fakeFs: FsStub;
 
     beforeEach(() => {
         fakeFs = {
             writeFile: sinon.spy()
         }
 
-        reporterModule = proxyquire('../src/Reporter/TrxReporter', {
-            fs: fakeFs
-        })
-    });
-
-    beforeEach(() => {
-        reporter = <karma.Reporter>(new reporterModule.TrxReporter(
-            fakeBaseReporterDecorator,
-            fakeConfig,
-            fakeLoggerFactory,
-            fakeHelper,
-            formatError));
+        factory = new TrxReporterFactory( { fs: fakeFs });
+        reporter = factory.createReporter();
     });
 
     it('can create instance', () => {
@@ -56,7 +30,27 @@ describe('karma-trx-reporter', () => {
 
     it('should write trx file after run complete', () => {
         // arrange
-        var fakeBrowser: karma.Browser = {
+        var fakeBrowser: karma.Browser = createFakeBrowser();
+        var fakeResult: karma.TestResult = createFakeResult();
+
+        // act
+        reporter.onRunStart([ fakeBrowser ])
+        reporter.onBrowserStart(fakeBrowser);
+        reporter.specSuccess(fakeBrowser, fakeResult)
+        reporter.onBrowserComplete(fakeBrowser)
+        reporter.onRunComplete()
+        
+        // assert
+        //const  writtenXml = fakeFs.writeFile.firstCall.args[1];
+        expect(fakeFs.writeFile).to.have.been.called
+    });
+
+    it('', () => {
+
+    });
+
+    function createFakeBrowser(): karma.Browser {
+        return {
             id: 'Android_4_1_2',
             name: 'Android',
             fullName: 'Android 4.1.2',
@@ -70,8 +64,10 @@ describe('karma-trx-reporter', () => {
                 netTime: 10 * 1000
                 }
         };
+    }
 
-        var fakeResult: karma.TestResult = {
+    function createFakeResult(): karma.TestResult {
+        return {
             suite: [
                 'Sender',
                 'using it',
@@ -83,15 +79,5 @@ describe('karma-trx-reporter', () => {
             success: true,
             skipped: false
         };
-
-        // act
-        reporter.onRunStart([ fakeBrowser ])
-        reporter.onBrowserStart(fakeBrowser);
-        reporter.specSuccess(fakeBrowser, fakeResult)
-        reporter.onBrowserComplete(fakeBrowser)
-        reporter.onRunComplete()
-
-        // assert
-        expect(fakeFs.writeFile).to.have.been.called
-    });
+    }
 });
