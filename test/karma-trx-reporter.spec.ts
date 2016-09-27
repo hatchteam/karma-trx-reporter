@@ -2,6 +2,8 @@ import { use, expect } from 'chai';
 import * as sinonchai from 'sinon-chai';
 import * as sinon from 'sinon';
 import * as proxyquire from 'proxyquire';
+import * as fs from 'fs';
+import { parseXmlString, XMLDocument } from 'libxmljs';
 
 import { TrxReporterFactory } from './TrxReporterFactory';
 import { FsStub } from './Stubs';
@@ -34,19 +36,30 @@ describe('karma-trx-reporter', () => {
         var fakeResult: karma.TestResult = createFakeResult();
 
         // act
-        reporter.onRunStart([ fakeBrowser ])
-        reporter.onBrowserStart(fakeBrowser);
-        reporter.specSuccess(fakeBrowser, fakeResult)
-        reporter.onBrowserComplete(fakeBrowser)
-        reporter.onRunComplete()
+        simulateKarmaTestRun([ fakeBrowser ], [ fakeResult ]);
         
         // assert
         //const  writtenXml = fakeFs.writeFile.firstCall.args[1];
         expect(fakeFs.writeFile).to.have.been.called
     });
 
-    it('', () => {
+    it('resulting trx file is valid against the xsd', () => {
+        // arrange
+        const xsdString: string = fs.readFileSync('./test/vstst.xsd', 'utf8');
+        const xsdDoc: XMLDocument = parseXmlString(xsdString);
 
+        const fakeBrowser: karma.Browser = createFakeBrowser();
+        const fakeResult: karma.TestResult = createFakeResult();
+
+        // act
+        simulateKarmaTestRun([ fakeBrowser ], [ fakeResult ]);
+        
+        // assert
+        const  writtenXml = fakeFs.writeFile.firstCall.args[1];
+        const trxDoc = parseXmlString(writtenXml);
+
+        const isValidTrx: boolean = trxDoc.validate(xsdDoc);
+        expect(isValidTrx).to.be.true;
     });
 
     function createFakeBrowser(): karma.Browser {
@@ -79,5 +92,27 @@ describe('karma-trx-reporter', () => {
             success: true,
             skipped: false
         };
+    }
+
+    function simulateKarmaTestRun(browsers: Array<karma.Browser>, results: Array<karma.TestResult>): void {
+        reporter.onRunStart(browsers)
+
+        for(let browser of browsers) {
+            reporter.onBrowserStart(browser);
+
+            for(let result of results) {
+                if (result.success) {
+                    reporter.specSuccess(browser, result);
+                } else if(result.skipped) {
+                    reporter.specSkipped(browser, result);
+                } else {
+                    reporter.specFailure(browser, result);
+                }
+            }
+            
+            reporter.onBrowserComplete(browser)
+        }
+
+        reporter.onRunComplete()
     }
 });
