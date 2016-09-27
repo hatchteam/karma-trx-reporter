@@ -12,7 +12,7 @@ export class TrxReporter implements karma.Reporter {
 
     private testRun: TestRun;
     private hostName: string = os.hostname();
-    private log:karma.Logger;
+    private log: karma.Logger;
     private pendingFileWritings: number = 0;
     private fileWritingFinished: () => any = () => {};
 
@@ -20,12 +20,12 @@ export class TrxReporter implements karma.Reporter {
         private baseReporterDecorator: (reporter: karma.Reporter) => any,
         private config: TrxReporterConfig,
         logger: karma.LoggerFactory,
-        private helper: karma.Helper,        
+        private helper: karma.Helper,
         private formatError: (error: string) => string) {
 
         this.log = logger.create('reporter.trx');
-        this.baseReporterDecorator(this);   
-    }
+        this.baseReporterDecorator(this);
+    };
 
     public onRunStart(browsers: Array<karma.Browser>): void {
         const userName: string = process.env.USERNAME || process.env.USER;
@@ -41,19 +41,19 @@ export class TrxReporter implements karma.Reporter {
                 finish: runStartTimestamp
             }
         });
-    }
+    };
 
-    public onRunComplete(): void {   
+    public onRunComplete(): void {
         const self = this;
 
         this.testRun.times.finish = TrxReporter.getTimestamp();
 
-        const outputFile: string = this.config.outputFile;        
-        const output:string = this.testRun.toXml();
+        const outputFile: string = this.config.outputFile;
+        const output: string = this.testRun.toXml();
         this.testRun = null;
 
         this.pendingFileWritings++;
-        
+
         this.helper.mkdirIfNotExists(path.dirname(outputFile), function () {
             fs.writeFile(outputFile, output, function (err) {
                 if (err) {
@@ -63,45 +63,41 @@ export class TrxReporter implements karma.Reporter {
                 }
 
                 if (!--self.pendingFileWritings) {
-                    self.fileWritingFinished()
+                    self.fileWritingFinished();
                 }
-            });     
+            });
         });
-
-        
-    }
+    };
 
     public onBrowserStart(browser: karma.Browser): void {
-
-    }
+    };
 
     public onBrowserComplete(browser: karma.Browser): void {
-
-    }
+    };
 
     public specSuccess(browser: karma.Browser, result: karma.TestResult): void {
         this.addSpec(browser, result);
-    }
+    };
 
     public specSkipped(browser: karma.Browser, result: karma.TestResult): void {
         this.addSpec(browser, result);
-    }
+    };
 
     public specFailure(browser: karma.Browser, result: karma.TestResult): void {
         this.addSpec(browser, result);
-    }
+    };
 
     public onExit (done: () => any) {
         if (this.pendingFileWritings) {
-            this.fileWritingFinished = done
+            this.fileWritingFinished = done;
         } else {
-        done()
-    }
-  }
+            done();
+        };
+    };
 
     private static getTimestamp() {
         return (new Date()).toISOString().substr(0, 19);
-    }
+    };
 
     private static formatDuration(duration: number): string {
         duration = duration | 0;
@@ -125,12 +121,12 @@ export class TrxReporter implements karma.Reporter {
     private static getTestOutcome(result: karma.TestResult) {
         if (result.skipped) {
             return Outcomes.NOTEXECUTED;
-        } else if(result.success) {
+        } else if (result.success) {
             return Outcomes.PASSED;
         } else {
             return Outcomes.FAILED;
         }
-    }
+    };
 
     private addSpec = (browser: karma.Browser, result: karma.TestResult) => {
         const unitTestName: string = Formatters.defaultNameFormatter(browser, result);
@@ -151,9 +147,5 @@ export class TrxReporter implements karma.Reporter {
             endTime: TrxReporter.getTimestamp(),
             errorMessage: !result.success ? errorMessage : null
         });
-    }
-
-    private saveTestRun = () => {
-
     };
 }

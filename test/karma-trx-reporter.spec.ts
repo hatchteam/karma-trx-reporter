@@ -19,7 +19,7 @@ describe('karma-trx-reporter', () => {
     beforeEach(() => {
         fakeFs = {
             writeFile: sinon.spy()
-        }
+        };
 
         factory = new TrxReporterFactory( { fs: fakeFs });
         reporter = factory.createReporter();
@@ -32,15 +32,14 @@ describe('karma-trx-reporter', () => {
 
     it('should write trx file after run complete', () => {
         // arrange
-        var fakeBrowser: karma.Browser = createFakeBrowser();
-        var fakeResult: karma.TestResult = createFakeResult();
+        let fakeBrowser: karma.Browser = createFakeBrowser();
+        let fakeResult: karma.TestResult = createFakeResult();
 
         // act
         simulateKarmaTestRun([ fakeBrowser ], [ fakeResult ]);
-        
+
         // assert
-        //const  writtenXml = fakeFs.writeFile.firstCall.args[1];
-        expect(fakeFs.writeFile).to.have.been.called
+        expect(fakeFs.writeFile).to.have.been.called;
     });
 
     it('resulting trx file is valid against the xsd', () => {
@@ -53,7 +52,7 @@ describe('karma-trx-reporter', () => {
 
         // act
         simulateKarmaTestRun([ fakeBrowser ], [ fakeResult ]);
-        
+
         // assert
         const  writtenXml = fakeFs.writeFile.firstCall.args[1];
         const trxDoc = parseXmlString(writtenXml);
@@ -77,7 +76,7 @@ describe('karma-trx-reporter', () => {
                 netTime: 10 * 1000
                 }
         };
-    }
+    };
 
     function createFakeResult(): karma.TestResult {
         return {
@@ -92,27 +91,27 @@ describe('karma-trx-reporter', () => {
             success: true,
             skipped: false
         };
-    }
+    };
 
     function simulateKarmaTestRun(browsers: Array<karma.Browser>, results: Array<karma.TestResult>): void {
-        reporter.onRunStart(browsers)
+        reporter.onRunStart(browsers);
 
-        for(let browser of browsers) {
+        for (let browser of browsers) {
             reporter.onBrowserStart(browser);
 
-            for(let result of results) {
+            for (let result of results) {
                 if (result.success) {
                     reporter.specSuccess(browser, result);
-                } else if(result.skipped) {
+                } else if (result.skipped) {
                     reporter.specSkipped(browser, result);
                 } else {
                     reporter.specFailure(browser, result);
                 }
             }
-            
-            reporter.onBrowserComplete(browser)
+
+            reporter.onBrowserComplete(browser);
         }
 
-        reporter.onRunComplete()
-    }
+        reporter.onRunComplete();
+    };
 });

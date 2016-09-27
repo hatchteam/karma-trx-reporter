@@ -7,21 +7,21 @@ const fakeConfig  = {
     outputFile: './TestTrxResultsFile.trx'
 };
 
-const fakeHelper = { 
+const fakeHelper = {
     mkdirIfNotExists: sinon.stub().yields(),
-    normalizeWinPath: (directory:string) => directory
+    normalizeWinPath: (directory: string) => directory
 };
 
 const fakeLoggerFactory = {
     create: noop
-}
+};
 
 const formatError = (error: string) => error;
 const fakeBaseReporterDecorator = noop;
 
 export class TrxReporterFactory {
 
-    constructor(private requireStubs: any) {     
+    constructor(private requireStubs: any) {
     }
 
     public createReporter(): karma.Reporter {
