@@ -33,10 +33,17 @@ module.exports = function(config) {
     reporters: ['progress', 'trx'],
 
     // the default configuration
-	trxReporter: { outputFile: 'test-results.trx' }
+	trxReporter: { outputFile: 'test-results.trx', shortTestName: false }
   });
 };
 ```
+
+### outputFile
+The output file specifies where the trx file will be written.
+
+### shortTestName
+The trx reporter will attend the browser name to the test name by default.
+This can be switched off with the shortTestName config property.
 
 You can pass list of reporters as a CLI argument too:
 ```bash
