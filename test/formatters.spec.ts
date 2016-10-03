@@ -5,6 +5,7 @@ describe('formatters', () => {
         // arrange
 
         // act
+        // Formatters.defaultNameFormatter(undefined, undefined)
 
         // assert
     });
