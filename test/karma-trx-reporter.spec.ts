@@ -5,7 +5,7 @@ import * as proxyquire from 'proxyquire';
 import * as fs from 'fs';
 
 import { TrxReporterFactory } from './TrxReporterFactory';
-import { FsStub } from './Stubs';
+import { FsStub, createFakeBrowser, createFakeResult } from './Helpers';
 
 use(sinonchai);
 
@@ -146,38 +146,6 @@ describe('karma-trx-reporter', () => {
         const  writtenXml = fakeFs.writeFile.firstCall.args[1];
         expect(writtenXml).to.contain('outcome=\"NotExecuted\"');
     });
-
-    function createFakeBrowser(name: string, error: boolean, success: number, skipped: number, failed: number): karma.Browser {
-        return {
-            id: `${name}_4_1_2`,
-            name: name,
-            fullName: `${name} 4.1.2`,
-            lastResult: {
-                error: false,
-                total: 1,
-                success: 1,
-                skipped: 0,
-                failed: 0,
-                totalTime: 10 * 1000,
-                netTime: 10 * 1000
-                }
-        };
-    };
-
-    function createFakeResult(description: string, success: boolean, skipped: boolean): karma.TestResult {
-        return {
-            suite: [
-                'Sender',
-                'using it',
-                'get request'
-            ],
-            description: description,
-            log: [],
-            time: 10 * 1000,
-            success: success,
-            skipped: skipped
-        };
-    };
 
     function simulateKarmaTestRun(browsers: Array<karma.Browser>, results: Array<karma.TestResult>): void {
         reporter.onRunStart(browsers);
