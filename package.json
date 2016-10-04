@@ -1,10 +1,15 @@
 {
   "name": "karma-trx-reporter",
-  "version": "1.0.0-alpah2",
+  "version": "1.0.0-alpah3",
   "description": "A Karma plugin. Report results in MSTest trx format.",
   "main": "src/index.js",
   "files": [
-    "src/index.js"
+    "src/index.js",
+    "src/Reporter/index.js",
+    "src/Reporter/Formatters.js",
+    "src/Reporter/Outcomes.js",
+    "src/Reporter/TrxReporter.js",
+    "src/Reporter/TrxReporterConfig.js"
   ],
   "scripts": {
     "test": "npm run build && npm run tslint && ./node_modules/.bin/mocha --timeout 259200000 ./test/*.js",
