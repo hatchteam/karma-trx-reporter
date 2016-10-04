@@ -147,6 +147,37 @@ describe('karma-trx-reporter', () => {
         expect(writtenXml).to.contain('outcome=\"NotExecuted\"');
     });
 
+    it('resulting trx file with multiple browsers contains spec for all browsers', () => {
+        // arrange
+        const fakeBrowserAndroid: karma.Browser = createFakeBrowser('Android', false, 1, 0, 0);
+        const fakeBrowserChrome: karma.Browser = createFakeBrowser('Chrome', false, 1, 0, 0);
+        const fakeResult: karma.TestResult = createFakeResult('should not fail', true, false);
+
+        // act
+        simulateKarmaTestRun([ fakeBrowserAndroid, fakeBrowserChrome ], [ fakeResult ]);
+
+        // assert
+        const  writtenXml = fakeFs.writeFile.firstCall.args[1];
+        expect(writtenXml).to.contain('name=\"Android_should not fail\"');
+        expect(writtenXml).to.contain('name=\"Chrome_should not fail\"');
+    });
+
+    it('resulting trx file with multiple browsers and multiple specs contains correct counters', () => {
+        // arrange
+        const fakeBrowserAndroid: karma.Browser = createFakeBrowser('Android', false, 1, 0, 0);
+        const fakeBrowserChrome: karma.Browser = createFakeBrowser('Chrome', false, 1, 0, 0);
+        const fakeResultSuccess: karma.TestResult = createFakeResult('should not fail', true, false);
+        const fakeResultFailed: karma.TestResult = createFakeResult('should  fail', false, false);
+        const fakeResultSkipped: karma.TestResult = createFakeResult('should be skipped', false, true);
+
+        // act
+        simulateKarmaTestRun([ fakeBrowserAndroid, fakeBrowserChrome ], [ fakeResultSuccess, fakeResultFailed, fakeResultSkipped ]);
+
+        // assert
+        const  writtenXml = fakeFs.writeFile.firstCall.args[1];
+        expect(writtenXml).to.contain('<Counters total=\"6\" executed=\"4\" passed=\"2\" error=\"0\" failed=\"2\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"2\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\"/>');
+    });
+
     function simulateKarmaTestRun(browsers: Array<karma.Browser>, results: Array<karma.TestResult>): void {
         reporter.onRunStart(browsers);
 
