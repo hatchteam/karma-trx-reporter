@@ -7,7 +7,7 @@ import { TrxReporterConfig } from './TrxReporterConfig';
 import * as Formatters from './Formatters';
 import * as Outcomes from './Outcomes';
 
-export class TrxReporter implements karma.Reporter {
+class TrxReporter implements karma.Reporter {
     public static $inject: Array<string>;
 
     private testRun: TestRun;
@@ -149,3 +149,7 @@ export class TrxReporter implements karma.Reporter {
         });
     };
 }
+
+TrxReporter.$inject = ['baseReporterDecorator', 'config.trxReporter', 'logger', 'helper', 'formatError'];
+
+export { TrxReporter };
