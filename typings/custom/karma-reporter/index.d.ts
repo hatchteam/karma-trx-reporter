@@ -26,6 +26,7 @@ declare namespace karma {
         skipped: number;
         success: number;
         error: boolean;
+        disconnected: boolean;
         totalTime: number;
         netTime: number;
     }
