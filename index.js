@@ -64,6 +64,12 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
         testRun.ele('TestSettings')
             .att('name', 'Karma Test Run')
             .att('id', newGuid());
+			
+		testRun.ele('Times')
+			.att('creation', getTimestamp())
+			.att('queuing', getTimestamp())
+			.att('start', getTimestamp())
+			.att('finish', getTimestamp());
 
         times = testRun.ele('Times')
         times.att('creation', runStartTimestamp)
