@@ -18,7 +18,7 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
 
     var getTimestamp = function () {
         // todo: use local time ?
-        return (new Date()).toISOString().substr(0, 19);
+        return (new Date()).toISOString();
     }
 
     var s4 = function () {
