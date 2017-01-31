@@ -39,15 +39,17 @@ module.exports = function(config) {
 ```
 ### outDir (optional)
 The folder where the trx file will be written
+```js
 trxReporter: { outputDir: 'testresults', outputFile: 'test-results.trx', shortTestName: false }
-
+```
 ### outputFile
 The output file specifies where the trx file will be written.
 
 ### outputFile with datetime
 The output file specifies where the trx file will be written.
+```js
 trxReporter: { outputDir: 'testresults', outputFile: 'test-results_${date}.trx', shortTestName: false }
-
+```
 ### shortTestName
 The trx reporter will attend the browser name to the test name by default.
 This can be switched off with the shortTestName config property.
