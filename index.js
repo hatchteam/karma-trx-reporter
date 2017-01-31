@@ -3,9 +3,13 @@ var fs = require('fs');
 var builder = require('xmlbuilder');
 
 var TRXReporter = function (baseReporterDecorator, config, emitter, logger, helper, formatError) {
+<<<<<<< HEAD
     var outputFilePath;
     var outputDir = config.outputDir ? config.outputDir : '';
     var outputFile = config.outputFile ? config.outputFile : 'test-results.trx';;
+=======
+    var outputFile = config.outputFile;
+>>>>>>> f263edb35554de5d98d477d1a5a022b64dc68bf7
     var shortTestName = !!config.shortTestName;
     var log = logger.create('reporter.trx');
     var hostName = require('os').hostname();
@@ -55,7 +59,10 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
     baseReporterDecorator(this);
 
     this.onRunStart = function () {
+<<<<<<< HEAD
         outputFilePath = path.join(outputDir, outputFile.replace('${date}', new Date().toISOString().replace(/:/g, '')))
+=======
+>>>>>>> f263edb35554de5d98d477d1a5a022b64dc68bf7
         var userName = process.env.USERNAME || process.env.USER;
         var runStartTimestamp = getTimestamp();
         testRun = builder.create("TestRun", {version: '1.0', encoding: 'UTF-8'})
@@ -118,8 +125,13 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
         times.att('finish', getTimestamp());
         var xmlToOutput = testRun;
 
+<<<<<<< HEAD
         helper.mkdirIfNotExists(path.dirname(outputFilePath), function () {
             fs.writeFile(outputFilePath, xmlToOutput.end({pretty: true}), function (err) {
+=======
+        helper.mkdirIfNotExists(path.dirname(outputFile), function () {
+            fs.writeFile(outputFile, xmlToOutput.end({pretty: true}), function (err) {
+>>>>>>> f263edb35554de5d98d477d1a5a022b64dc68bf7
                 if (err) {
                     log.warn('Cannot write TRX testRun\n\t' + err.message);
                 } else {

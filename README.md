@@ -37,6 +37,7 @@ module.exports = function(config) {
   });
 };
 ```
+
 ### outDir (optional)
 The folder where the trx file will be written
 ```js
