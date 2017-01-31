@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - '4.0'
+deploy:
+  provider: npm
+  email: leh@zuehlke.com
+  api_key:
+    secure: NkgFdbBUNdxtd1X6/JeDeHPJaaeEt6LQ/U3UG1kghToN+6H8d05wIYeNAGqrivXrxHJI3yNxbKHAEuxklKu3ul/Ckwjt6jc2Z3WM7bUUrXL8N4mWYVj2gb+JX0A0+uSmsmSbDS9fmEtKg9krNNdcBBgfOgcWuX8ja3FKHfzh/0o=
+  on:
+    tags: true
