@@ -33,7 +33,10 @@ module.exports = function(config) {
     reporters: ['progress', 'trx'],
 
     // the default configuration
-	trxReporter: { outputFile: 'test-results.trx', shortTestName: false }
+    trxReporter: {
+      outputFile: 'test-results.trx',
+      shortTestName: false
+    }
   });
 };
 ```
