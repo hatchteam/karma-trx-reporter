@@ -30,10 +30,18 @@ npm install karma-trx-reporter --save-dev
 // karma.conf.js
 module.exports = function(config) {
   config.set({
+    plugins: [
+      ...
+      require('karma-trx-reporter')
+    ],
+    
     reporters: ['progress', 'trx'],
 
     // the default configuration
-	trxReporter: { outputFile: 'test-results.trx', shortTestName: false }
+    trxReporter: {
+      outputFile: 'test-results.trx',
+      shortTestName: false
+    }
   });
 };
 ```
