@@ -5,6 +5,7 @@ var builder = require('xmlbuilder');
 var TRXReporter = function (baseReporterDecorator, config, emitter, logger, helper, formatError) {
     var outputFile = config.outputFile;
     var shortTestName = !!config.shortTestName;
+    var fullISOTimestamp = !!config.fullISOTimestamp;
     var log = logger.create('reporter.trx');
     var hostName = require('os').hostname();
     var testRun;
@@ -18,7 +19,8 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
 
     var getTimestamp = function () {
         // todo: use local time ?
-        return (new Date()).toISOString();
+        var timestamp = (new Date()).toISOString();
+        return fullISOTimestamp ? timestamp : timestamp.substr(0,19);
     }
 
     var s4 = function () {
