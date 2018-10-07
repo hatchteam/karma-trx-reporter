@@ -19,7 +19,7 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
     var getTimestamp = function () {
         // todo: use local time ?
         return (new Date()).toISOString().substr(0, 19);
-    }
+    };
 
     var s4 = function () {
         return Math.floor((1 + Math.random()) * 0x10000)
@@ -65,9 +65,9 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
             .att('name', 'Karma Test Run')
             .att('id', newGuid());
 
-        times = testRun.ele('Times')
-        times.att('creation', runStartTimestamp)
-        times.att('queuing', runStartTimestamp)
+        times = testRun.ele('Times');
+        times.att('creation', runStartTimestamp);
+        times.att('queuing', runStartTimestamp);
         times.att('start', runStartTimestamp);
 
         resultSummary = testRun.ele('ResultSummary');
