@@ -56,7 +56,7 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
     baseReporterDecorator(this);
 
     this.onRunStart = function () {
-        var userName = process.env.USERNAME || process.env.USER;
+        var userName = process.env.USERNAME || process.env.USER || "karma-trx";
         var runStartTimestamp = getTimestamp();
         testRun = builder.create("TestRun", {version: '1.0', encoding: 'UTF-8'})
             .att('id', newGuid())
