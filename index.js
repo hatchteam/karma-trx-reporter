@@ -2,10 +2,15 @@ var path = require('path');
 var fs = require('fs');
 var builder = require('xmlbuilder');
 
+function defaultNameFormatter (browser, result) {
+    return browser.name + '_' + result.description;
+}
+
 var TRXReporter = function (baseReporterDecorator, config, emitter, logger, helper, formatError) {
     var outputFile = config.outputFile;
     var shortTestName = !!config.shortTestName;
     var trimTimestamps = !!config.trimTimestamps;
+    var nameFormatter = config.nameFormatter || defaultNameFormatter;
     var log = logger.create('reporter.trx');
     var hostName = require('os').hostname();
     var testRun;
@@ -131,9 +136,9 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
 
     this.specSuccess = this.specSkipped = this.specFailure = function (browser, result) {
         var unitTestId = newGuid();
-        var unitTestName = shortTestName
-            ? result.description
-            : browser.name + '_' + result.description;
+        var unitTestName = shortTestName 
+            ? result.description 
+            : nameFormatter(browser, result);
         var className = result.suite.join('.');
         var codeBase = className + '.' + unitTestName;
 
