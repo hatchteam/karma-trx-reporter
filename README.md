@@ -56,7 +56,7 @@ This can be switched off with the shortTestName config property.
 ### nameFormatter
 You can provide a custom function to format the `testName` field of the trx.
 The `nameFormatter` is a function with parameters `(browser, result)` which returns a string.
-When `nameFormatter` is provided, `shortTestName` is ignored.
+When `shortTestName` is `true``, `nameFormatter` is ignored.
 
 You can pass list of reporters as a CLI argument too:
 ```bash
