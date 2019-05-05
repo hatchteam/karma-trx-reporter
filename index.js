@@ -163,7 +163,7 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
             .att('testId', unitTestId)
             .att('testName', unitTestName)
             .att('computerName', hostName)
-            .att('duration', formatDuration(result.time || 0))
+            .att('duration', formatDuration(result.time > 0 ? result.time : 0))
             .att('startTime', getTimestamp())
             .att('endTime', getTimestamp())
             // todo: are there other test types?
