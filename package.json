@@ -1,6 +1,6 @@
 {
   "name": "karma-trx-reporter",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "A Karma plugin. Report results in MSTest trx format.",
   "main": "index.js",
   "scripts": {},
