@@ -140,8 +140,9 @@ var TRXReporter = function(
                 'Merging result(s) from parallel test run(s) into the trx report.'
             );
             try {
-                for (var i in browser.lastResult._realLastResults) {
-                    var item = browser.lastResult._realLastResults[i];
+                var realLastResult = browser.lastResult._realLastResults;
+                for (var i in realLastResult) {
+                    var item = realLastResult[i];
                     total += item.total;
                     executed += item.total - item.skipped;
                     successful += item.success;
