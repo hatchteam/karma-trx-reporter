@@ -120,18 +120,23 @@ var TRXReporter = function (baseReporterDecorator, config, emitter, logger, help
     };
 
     this.onRunComplete = function () {
-        times.att('finish', getTimestamp());
-        var xmlToOutput = testRun;
-
-        helper.mkdirIfNotExists(path.dirname(outputFile), function () {
-            fs.writeFile(outputFile, xmlToOutput.end({pretty: true}), function (err) {
-                if (err) {
-                    log.warn('Cannot write TRX testRun\n\t' + err.message);
-                } else {
-                    log.debug('TRX results written to "%s".', outputFile);
-                }
+        try {
+            times.att('finish', getTimestamp());
+            var xmlToOutput = testRun;
+    
+            helper.mkdirIfNotExists(path.dirname(outputFile), function () {
+                fs.writeFile(outputFile, xmlToOutput.end({pretty: true}), function (err) {
+                    if (err) {
+                        log.warn('Cannot write TRX testRun\n\t' + err.message);
+                    } else {
+                        log.debug('TRX results written to "%s".', outputFile);
+                    }
+                });
             });
-        });
+        } catch (e) {
+            console.log(e);
+        }
+        
     };
 
     this.specSuccess = this.specSkipped = this.specFailure = function (browser, result) {
